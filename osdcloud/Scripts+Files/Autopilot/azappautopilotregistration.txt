@@ -1,0 +1,54 @@
+$env:Path += ";C:\Program Files\WindowsPowerShell\Scripts"
+
+function Write-textMenuList($menuItems,$menuQuestion,$defaultItem) {
+    while ($menuReturn -lt 1) {
+        $i = 0
+        foreach ($menuItem in [array]$menuItems) {
+            Write-Host ("  [{0}]`t" -F $i) -ForegroundColor Cyan -NoNewline
+            Write-Host ("{0}" -F $menuitem) -ForegroundColor Gray
+            $i++
+        }
+        $defaultSelect  = $menuItems[$defaultItem]
+        $menuSelect     = $(Write-Host $menuQuestion -ForegroundColor Yellow -NoNewline) + $(Write-Host " [Default:"$defaultSelect" ] " -ForegroundColor White -NoNewline; Read-Host)
+        $menuReturn     = $menuItems[$menuSelect]
+        $menuReturn
+    }
+}
+
+$list = "ATLO-HAzDJ", "Chair-HAzDJ", "COMM-HAzDJ", "DENO-HAzDJ", "eMini-HAzDJ", "Nuc-HAzDJ", "OALJ-HAzDJ", "OExD-HAzDJ", "OExDiT-HAzDJ", "OExS-HAzDJ", "OGeC-HAzDJ", "WashDC-AzDJ", "DENO-AzDJ", "ATLO-AzDJ", "OExDiT-AzDJ"
+$selected = Write-textMenuList -menuItems $list -menuQuestion "Choose AutopilotEnroll GroupTag" -defaultItem 0
+
+Write-Host "You selected: $selected" -ForegroundColor Green
+
+#endregion MAIN SCRIPT
+# Set execution policy
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy unrestricted -Force
+Write-Host -ForegroundColor Cyan "(i) Installing required components`n"
+# Install required modules
+$ModulesToInstall = @(
+    "Get-WindowsAutoPilotInfo",
+    "WindowsAutopilotIntune",
+    "Microsoft.Graph.Authentication"
+)
+
+foreach ($module in $ModulesToInstall) {
+    if (-not (Get-Module -Name $module -ListAvailable)) {
+        Write-Host "Installing module: $module" -ForegroundColor Yellow
+        Install-Script -Name $module -Repository PSGallery -Force 
+        Install-Module -Name $module -Repository PSGallery -Force
+    } else {
+        Write-Host "Module already installed: $module" -ForegroundColor Green
+    }
+}
+
+$AutopilotParams = @{
+Online = $true
+Assign = $true
+TenantId = "332f08e4-4a3b-4f06-a065-c4f6f8f8474d" 
+AppId = "fa7b9855-a9de-4dcf-9be8-28603d3c266b" 
+AppSecret = "r5x8Q~WS77r8y_ZpAc_y.dLIqP63OoSLTQIsYail"
+#AppSecret = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $ClientId, $ClientSecret
+GroupTag = "$SelectedGroupTag"
+}
+
+Get-WindowsAutoPilotInfo @AutopilotParams
