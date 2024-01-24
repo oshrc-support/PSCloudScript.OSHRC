@@ -27,3 +27,21 @@ jobs:
           slot-name: 'Production'
           package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_7578A8FBCCBF41DFAFBE6558A24C6167 }}
+
+      # Add steps for listing Blob Storage contents and allowing for downloading blob content
+      - name: 'List and Download Blob Contents'
+        env:
+          CONNECTION_STRING: ${{ secrets.STORAGE_ACCOUNT_CONNECTION_STRING }}
+        run: |
+          $ErrorActionPreference = "Stop"
+          $context = New-AzStorageContext -ConnectionString $env:CONNECTION_STRING
+          $containerName = "osdprodgourlgn564sa"
+        
+          # List blob contents
+          $blobs = Get-AzStorageBlob -Context $context -Container $containerName
+          Write-Host "Blob contents:"
+          $blobs | ForEach-Object { Write-Host $_.Name }
+        
+          # Download blob content (example: downloading the first blob)
+          $blobToDownload = $blobs[0].Name
+          Get-AzStorageBlobContent -Context $context -Container $containerName -Blob $blobToDownload -Destination "downloaded_blob.txt"
