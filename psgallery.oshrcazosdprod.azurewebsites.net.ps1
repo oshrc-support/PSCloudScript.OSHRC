@@ -1,5 +1,5 @@
 'PSCloudScript to enable WinPE PSGallery'
-'iex (irm psgallery.pscloudscript.com)'
+'iex (irm psgallery.oshrcazosdprod.azurewebsites.netm)'
 
 function Set-WinPELocalAppData
 {
