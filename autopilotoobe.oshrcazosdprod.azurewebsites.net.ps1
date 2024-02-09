@@ -1,5 +1,5 @@
 'PSCloudScript for AutopilotOOBE Requirements'
-'iex (irm autopilotoobe.pscloudscript.com)'
+'iex (irm autopilotoobe.oshrcazosdprod.azurewebsites.net)'
 
 if ($env:SystemDrive -eq 'X:')
 {
