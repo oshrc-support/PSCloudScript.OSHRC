@@ -41,7 +41,7 @@
   <Actions Context="Author">
     <Exec>
       <Command>Powershell.exe</Command>
-      <Arguments>-ExecutionPolicy Bypass -Command "& { iex (irm 'https://raw.githubusercontent.com/oshrc-support/osdcloud/main/Scripts/WaitForOnboarding/WaitforOnboard.ps1') }"</Arguments>
+      <Arguments>"-ExecutionPolicy Bypass -Command Invoke-RestMethod -Uri https://gist.githubusercontent.com/oshrc-support/9c9b9224b6df34aa091ce8d46f77ff43/raw/WaitforOnboard.ps1 | Invoke-Expression -Wait"</Arguments>
     </Exec>
   </Actions>
 </Task>
